@@ -11,7 +11,7 @@ hide_reading_time = true
 Rust is a very unique programming language. It gives you low-level control over your code and the ability to manage 
 memory without allocating it or de-allocating it with specific commands (although that is also possible with the 
 [unsafe](https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html?highlight=unsafe#unsafe-rust)
-keyword.) One of the ways that Rust can guarantee memory safety without a garbage collector is by implementing the 
+keyword). One of the ways that Rust can guarantee memory safety without a garbage collector is by implementing the 
 concepts of *ownership* and *borrowing* into the language.
 
 <!-- more -->
@@ -23,9 +23,9 @@ code to compile.
 The very basic ownership rules in Rust are:
 * Every value is assigned to a variable, and that variable is the value's owner.
 * Every value can only have ONE owner at any given time.
-* When the owner variable goes out of scope, a special function named `drop` is called it and its value is dropped.
+* When the owner variable goes out of scope, a special function named `drop` is called and its value is dropped.
 
-Lets define a couple of those terms mentioned:
+Let's define a couple of those terms mentioned:
 
 **_scope_** refers to the lines in the program where a variable is valid.
 
@@ -101,7 +101,7 @@ fn rent_movie(movie: &String) -> &String{ //Take a String reference as a paramet
 }
 ```
 
-So far, so good. but what if we try to modify the `movie` in `rent_movie()`?
+So far, so good. But what if we try to modify the `movie` in `rent_movie()`?
 
 ```rust
 fn main(){
@@ -130,7 +130,7 @@ error: aborting due to previous error
 ```
 
 This error illustrates something very important about Rust-- all variable are immutable by default! Typically, you would use a reference variable if you just wanted to read its value and not modify it.
-However, this error can be fixed by making `movie` mutable. That is, make it so that it's value can be modified. We can do this by adding the `mut` 
+However, this error can be fixed by making `movie` mutable. That is, make it so that its value can be modified. We can do this by adding the `mut` 
 keyword to the variable declaration and also make it so that `rent_movie()` accepts a mutable String as a parameter:
 
 ```rust
@@ -147,7 +147,7 @@ fn rent_movie(movie: &mut String) -> &mut String{ //Take a mutable String refere
 
 ## Conclusion
 
-The main takeaways from this post are: values can be assigned (moved) to different variables, but can only belong to ONE
+The main takeaways from this post are: values can be moved to different variables, but can only belong to ONE
  variable at any given time. If you want to temporarily pass the value of a variable to a function, you can pass a reference 
  to that variable to the function, and the function will **_borrow_** the variable and then give it back after the function 
 returns. There is a lot more to this topic, but I will leave it there for now!
