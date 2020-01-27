@@ -2,17 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     
         <url>
-            <loc>https://wonderful-ritchie-7ea4e0.netlify.com/</loc>
+            <loc>http://127.0.0.1:1111/</loc>
             
         </url>
     
         <url>
-            <loc>https://wonderful-ritchie-7ea4e0.netlify.com/blog/</loc>
+            <loc>http://127.0.0.1:1111/blog/</loc>
             
         </url>
     
         <url>
-            <loc>https://wonderful-ritchie-7ea4e0.netlify.com/blog/ownership-and-borrowing/</loc>
+            <loc>http://127.0.0.1:1111/blog/ownership-and-borrowing/</loc>
             
                 <lastmod>2020-01-26</lastmod>
             
