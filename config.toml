@@ -16,7 +16,7 @@ theme = "zola-sam"
 # Put all your custom variables here
 [extra]
 sam_menu = [
-    {text = "blog", link = "/blog"}
+    {text = "Calder's blog", link = "/blog"}
 ]
 
 home = "home"

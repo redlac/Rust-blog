@@ -1,6 +1,8 @@
 +++
 title = "Ownership and Borrowing in Rust"
 date = 2020-01-26
+hide_word_count = true
+hide_reading_time = true
 +++
 # Ownership and Borrowing in Rust
 
