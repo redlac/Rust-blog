@@ -11,7 +11,7 @@ hide_reading_time = true
 Rust is a very unique programming language. It gives you low-level control over your code and the ability to manage 
 memory without allocating it or de-allocating it with specific commands (although that is also possible with the 
 [unsafe](https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html?highlight=unsafe#unsafe-rust)
-keyword. One of the ways that Rust can guarantee memory safety without a garbage collector is by implementing the 
+keyword.) One of the ways that Rust can guarantee memory safety without a garbage collector is by implementing the 
 concepts of *ownership* and *borrowing* into the language.
 
 <!-- more -->
