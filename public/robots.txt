@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://wonderful-ritchie-7ea4e0.netlify.com/sitemap.xml

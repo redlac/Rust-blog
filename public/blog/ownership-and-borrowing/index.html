@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="referrer" content="no-referrer">
+
+        <link rel="stylesheet" href="https:&#x2F;&#x2F;wonderful-ritchie-7ea4e0.netlify.com&#x2F;fonts.css">
+        <link rel="stylesheet" href="https:&#x2F;&#x2F;wonderful-ritchie-7ea4e0.netlify.com&#x2F;style.css">
+
+        <title>
+    Ownership and Borrowing in Rust
+</title>
+
+        
+    </head>
+    <body>
+        
+    <div class="wrap">
+        <div class="section" id="title">
+            
+    Ownership and Borrowing in Rust
+
+        </div>
+        <div class="section" id="content">
+            
+    
+        
+            
+    
+    Sun Jan 26, 2020
+
+        
+        
+            
+                &#183; 979 words
+            
+        
+        
+            
+            
+                &#183; 5 min
+            
+        
+        
+        <hr/>
+    
+    <h1 id="ownership-and-borrowing-in-rust">Ownership and Borrowing in Rust</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Rust is a very unique programming language. It gives you low-level control over your code and the ability to manage 
+memory without allocating it or de-allocating it with specific commands (although that is also possible with the 
+<a href="https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html?highlight=unsafe#unsafe-rust">unsafe</a>
+keyword. One of the ways that Rust can guarantee memory safety without a garbage collector is by implementing the 
+concepts of <em>ownership</em> and <em>borrowing</em> into the language.</p>
+<p id="zola-continue-reading"><a name="continue-reading"></a></p>
+
+<h2 id="what-is-ownership">What is Ownership?</h2>
+<p>Ownership is the way that Rust manages memory. It is a set of rules that the compiler says must be followed in for your 
+code to compile.</p>
+<p>The very basic ownership rules in Rust are:</p>
+<ul>
+<li>Every value is assigned to a variable, and that variable is the value's owner.</li>
+<li>Every value can only have ONE owner at any given time.</li>
+<li>When the owner variable goes out of scope, a special function named <code>drop</code> is called it and its value is dropped.</li>
+</ul>
+<p>Lets define a couple of those terms mentioned:</p>
+<p><strong><em>scope</em></strong> refers to the lines in the program where a variable is valid.</p>
+<p><strong><em>drop</em></strong> is a function that Rust calls on variables allocated to the heap, that frees up memory for that variable when 
+it goes out of scope. </p>
+<p>In this very basic example, the variable <code>dog_owner</code> is the owner of the String <code>&quot;dog&quot;</code>:</p>
+<pre style="background-color:#2b303b;">
+<span style="color:#c0c5ce;">{</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> dog_owner = String::from(&quot;</span><span style="color:#a3be8c;">dog</span><span style="color:#c0c5ce;">&quot;); </span><span style="color:#65737e;">//&#39;let&#39; is the keyword used to declare variables in Rust</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></pre>
+<p>When the program reached the <code>}</code>, the variable <code>dog_owner</code> goes out of scope and <code>drop</code> is called on it to free the memory 
+it had allocated to it.</p>
+<p>In the next example, the ownership of the String <code>&quot;dog&quot;</code> is moved from <code>dog_owner</code> to <code>dog_trainer</code>: </p>
+<pre style="background-color:#2b303b;">
+<span style="color:#c0c5ce;">{</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> dog_owner = String::from(&quot;</span><span style="color:#a3be8c;">dog</span><span style="color:#c0c5ce;">&quot;); </span><span style="color:#65737e;">//This line creates a String type from the string primitive &quot;dog&quot;</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> dog_trainer = dog_owner;</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></pre>
+<p>At this point, the variable <code>dog_owner</code> is no longer valid. We can verify this by trying to print out the value of 
+<code>dog_owner</code>: </p>
+<pre style="background-color:#2b303b;">
+<span style="color:#c0c5ce;">{</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> dog_owner = String::from(&quot;</span><span style="color:#a3be8c;">dog</span><span style="color:#c0c5ce;">&quot;);</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> dog_trainer = dog_owner;</span><span style="color:#c0c5ce;">
+    println!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#c0c5ce;">&quot;, dog_owner); </span><span style="color:#65737e;">//println!() is used to print values to the system output</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></pre>
+<p>In other languages, you would expect that <code>dog</code> would be printed to the console, but in Rust this creates an error:</p>
+<pre style="background-color:#2b303b;">
+<span style="color:#c0c5ce;">error[</span><span style="color:#d08770;">E0382</span><span style="color:#c0c5ce;">]: borrow of moved value: `dog_owner`</span><span style="color:#c0c5ce;">
+  --&gt; src\main.rs:</span><span style="color:#d08770;">14</span><span style="color:#c0c5ce;">:</span><span style="color:#d08770;">24</span><span style="color:#c0c5ce;">
+   |</span><span style="color:#c0c5ce;">
+</span><span style="color:#d08770;">12 </span><span style="color:#c0c5ce;">|         </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> dog_owner = String::from(&quot;</span><span style="color:#a3be8c;">dog</span><span style="color:#c0c5ce;">&quot;);</span><span style="color:#c0c5ce;">
+   |             --------- move occurs because `dog_owner` has type `std::string::String`, which does not implement the `Copy` trait</span><span style="color:#c0c5ce;">
+</span><span style="color:#d08770;">13 </span><span style="color:#c0c5ce;">|         </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> dog_trainer = dog_owner;</span><span style="color:#c0c5ce;">
+   |                           --------- value moved here</span><span style="color:#c0c5ce;">
+</span><span style="color:#d08770;">14 </span><span style="color:#c0c5ce;">|         println!(&quot;</span><span style="color:#d08770;">{}</span><span style="color:#c0c5ce;">&quot;, dog_owner); </span><span style="color:#65737e;">//println!() is used to print values to the system output</span><span style="color:#c0c5ce;">
+   |                        ^^^^^^^^^ value borrowed here after </span><span style="color:#b48ead;">move</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+error: aborting due to previous error</span><span style="color:#c0c5ce;">
+</span></pre>
+<p>In the console, the error line <code>value borrowed here after move</code> means that we tried to <strong><em>borrow</em></strong> the variable 
+<code>dog_owner</code> by passing it into the <code>println!()</code> macro, but it was already moved to <code>dog_trainer</code> so this is not allowed. 
+<strong><em>Borrowing</em></strong> will be explained in the next section.</p>
+<h2 id="what-is-borrowing">What is Borrowing?</h2>
+<p>To start, let us define what <strong><em>references</em></strong> are: a reference is a variable that refers to another value, but does not 
+have ownership of it. When we pass a reference variable into a function, it is said that the function is <strong><em>borrowing</em></strong> 
+that variable.</p>
+<p>For example, the function <code>rent_movie()</code> is borrowing a reference to the <code>movie</code> variable:</p>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">(){</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> movie = String::from(&quot;</span><span style="color:#a3be8c;">Star Wars</span><span style="color:#c0c5ce;">&quot;);</span><span style="color:#c0c5ce;">
+    </span><span style="color:#96b5b4;">rent_movie</span><span style="color:#c0c5ce;">(&amp;movie);</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">rent_movie</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">movie</span><span style="color:#c0c5ce;">: &amp;String) -&gt; &amp;String{ </span><span style="color:#65737e;">//Take a String reference as a parameter, and return a String reference</span><span style="color:#c0c5ce;">
+    String::from(&quot;</span><span style="color:#a3be8c;">rented</span><span style="color:#c0c5ce;">&quot;) </span><span style="color:#65737e;">//The String &quot;rented&quot; is returned from the function. </span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></pre>
+<p>So far, so good. but what if we try to modify the <code>movie</code> in <code>rent_movie()</code>?</p>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">(){</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> movie = String::from(&quot;</span><span style="color:#a3be8c;">Star Wars</span><span style="color:#c0c5ce;">&quot;);</span><span style="color:#c0c5ce;">
+    </span><span style="color:#96b5b4;">rent_movie</span><span style="color:#c0c5ce;">(&amp;movie);</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">rent_movie</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">movie</span><span style="color:#c0c5ce;">: &amp;String) -&gt; &amp;String{ </span><span style="color:#65737e;">//Take a String reference as a parameter, and return a String reference</span><span style="color:#c0c5ce;">
+    movie.</span><span style="color:#96b5b4;">push_str</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">: Director&#39;s Cut</span><span style="color:#c0c5ce;">&quot;); </span><span style="color:#65737e;">//attempting to create the String &quot;Star Wars: Director&#39;s Cut&quot;</span><span style="color:#c0c5ce;">
+    String::from(&quot;</span><span style="color:#a3be8c;">rented</span><span style="color:#c0c5ce;">&quot;) </span><span style="color:#65737e;">//return &quot;rented&quot; </span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></pre>
+<p>This will not compile! As shown in the following error message, references are immutable in Rust:</p>
+<pre style="background-color:#2b303b;">
+<span style="color:#c0c5ce;">error[</span><span style="color:#d08770;">E0596</span><span style="color:#c0c5ce;">]: cannot borrow `*movie` as mutable, as it is behind a `&amp;` reference</span><span style="color:#c0c5ce;">
+  --&gt; src\main.rs:</span><span style="color:#d08770;">34</span><span style="color:#c0c5ce;">:</span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">
+   |</span><span style="color:#c0c5ce;">
+</span><span style="color:#d08770;">33 </span><span style="color:#c0c5ce;">| </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">rent_movie</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">movie</span><span style="color:#c0c5ce;">: &amp;String){</span><span style="color:#c0c5ce;">
+   |                      ------- help: consider changing this to be a mutable reference: `&amp;</span><span style="color:#b48ead;">mut </span><span style="color:#c0c5ce;">std::string::String`</span><span style="color:#c0c5ce;">
+</span><span style="color:#d08770;">34 </span><span style="color:#c0c5ce;">|     movie.</span><span style="color:#96b5b4;">push_str</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">: Director&#39;s Cut</span><span style="color:#c0c5ce;">&quot;); </span><span style="color:#65737e;">//attempting to create the String &quot;Star Wars: Director&#39;s Cut&quot;</span><span style="color:#c0c5ce;">
+   |     ^^^^^ `movie` is a `&amp;` reference, so the data it refers to cannot be borrowed as mutable</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+error: aborting due to previous error</span><span style="color:#c0c5ce;">
+</span></pre>
+<p>This error illustrates something very important about Rust-- all variable are immutable by default! Typically, you would use a reference variable if you just wanted to read its value and not modify it.
+However, this error can be fixed by making <code>movie</code> mutable. That is, make it so that it's value can be modified. We can do this by adding the <code>mut</code> 
+keyword to the variable declaration and also make it so that <code>rent_movie()</code> accepts a mutable String as a parameter:</p>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">(){</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> movie = String::from(&quot;</span><span style="color:#a3be8c;">Star Wars</span><span style="color:#c0c5ce;">&quot;);</span><span style="color:#c0c5ce;">
+    </span><span style="color:#96b5b4;">rent_movie</span><span style="color:#c0c5ce;">(&amp;</span><span style="color:#b48ead;">mut</span><span style="color:#c0c5ce;"> movie);</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">rent_movie</span><span style="color:#c0c5ce;">(</span><span style="color:#bf616a;">movie</span><span style="color:#c0c5ce;">: &amp;</span><span style="color:#b48ead;">mut</span><span style="color:#c0c5ce;"> String) -&gt; &amp;</span><span style="color:#b48ead;">mut</span><span style="color:#c0c5ce;"> String{ </span><span style="color:#65737e;">//Take a mutable String reference as a parameter, and return a mutable String reference</span><span style="color:#c0c5ce;">
+    movie.</span><span style="color:#96b5b4;">push_str</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">: Director&#39;s Cut</span><span style="color:#c0c5ce;">&quot;); </span><span style="color:#65737e;">//attempting to create the String &quot;Star Wars: Director&#39;s Cut&quot;</span><span style="color:#c0c5ce;">
+    movie </span><span style="color:#65737e;">//return the String &quot;Star Wars: Director&#39;s Cut&quot;</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></pre><h2 id="conclusion">Conclusion</h2>
+<p>The main takeaways from this post are: values can be assigned (moved) to different variables, but can only belong to ONE
+variable at any given time. If you want to temporarily pass the value of a variable to a function, you can pass a reference 
+to that variable to the function, and the function will <strong><em>borrow</em></strong> the variable and then give it back after the function 
+returns. There is a lot more to this topic, but I will leave it there for now!</p>
+<p><img src="https://www.rustacean.net/assets/rustacean-orig-noshadow.png" alt="Ferris" title="Ferris the crab" /></p>
+<h3 id="get-rusty">Get Rusty!</h3>
+<h4 id="see-more-at-the-official-rust-documentation">See more at the <a href="https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html">Official Rust documentation</a></h4>
+
+
+        </div>
+        
+    <div class="section bottom-menu">
+        <hr/>
+        <p>
+            
+                
+                    <a href="&#x2F;blog">Calder&#x27;s blog</a>
+                    &#183;
+                
+            
+            <a href="https:&#x2F;&#x2F;wonderful-ritchie-7ea4e0.netlify.com&#x2F;">
+                home
+            </a>
+        </p>
+    </div>
+
+        
+    
+
+    </div>
+
+    </body>
+</html>
