@@ -8,8 +8,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="referrer" content="no-referrer">
 
-        <link rel="stylesheet" href="https:&#x2F;&#x2F;happy-cori-96ef5a.netlify.com&#x2F;fonts.css">
-        <link rel="stylesheet" href="https:&#x2F;&#x2F;happy-cori-96ef5a.netlify.com&#x2F;style.css">
+        <link rel="stylesheet" href="http:&#x2F;&#x2F;127.0.0.1:1111&#x2F;fonts.css">
+        <link rel="stylesheet" href="http:&#x2F;&#x2F;127.0.0.1:1111&#x2F;style.css">
 
         <title>
     Traits and Generics in Rust
@@ -36,13 +36,13 @@
         
         
             
-                &#183; 295 words
+                &#183; 843 words
             
         
         
             
             
-                &#183; 2 min
+                &#183; 5 min
             
         
         
@@ -53,28 +53,95 @@
 <p>Many languages, such as Java, C++, and Python have ways of abstracting types so that you can minimize the duplication of your code and make it easier to read. Traits and Generics in Rust allow you to achieve these goals. I will explain these concepts by showing code examples that are implemented with and without Generics and Traits, but achieve the same things.</p>
 <p id="zola-continue-reading"><a name="continue-reading"></a></p>
 
-<h2 id="adding-functionality-without-generics">Adding functionality without Generics</h2>
-<p>In the following code example, I created a function that returns the average of a group of numbers that has been passed in as a parameter. Comments have been added to explain each line:</p>
+<h2 id="creating-struct-instances-without-generics">Creating struct instances without Generics</h2>
+<p>In the following code example, I will show how a struct can be created that holds a ZooAnimal. An enum for ZooAnimals has also been created in order to hold the different variants (types) of ZooAnimals:</p>
 <pre style="background-color:#2b303b;">
-<span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">calculate_average</span><span style="color:#c0c5ce;">() -&gt; </span><span style="color:#b48ead;">f64</span><span style="color:#c0c5ce;">{</span><span style="color:#c0c5ce;">
-    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> float_list = vec![</span><span style="color:#d08770;">1.0</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">2.3</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">4.5</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">5.9</span><span style="color:#c0c5ce;">, </span><span style="color:#d08770;">7.2</span><span style="color:#c0c5ce;">]; </span><span style="color:#65737e;">//A function is declared with the return value of f64 </span><span style="color:#c0c5ce;">
-    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> total = </span><span style="color:#d08770;">0.0</span><span style="color:#c0c5ce;">; </span><span style="color:#65737e;">//A new mutable variable is created with the type of f64</span><span style="color:#c0c5ce;">
+<span style="color:#b48ead;">enum </span><span style="color:#c0c5ce;">ZooAnimals{   </span><span style="color:#65737e;">//ZooAnimals enum that hold different varieties of animals.</span><span style="color:#c0c5ce;">
+    Tigers,</span><span style="color:#c0c5ce;">
+    Bears,</span><span style="color:#c0c5ce;">
+    Lions,</span><span style="color:#c0c5ce;">
+    Monkeys,</span><span style="color:#c0c5ce;">
+    Fish</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
 </span><span style="color:#c0c5ce;">
-    </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">&amp;item in float_list.</span><span style="color:#96b5b4;">iter</span><span style="color:#c0c5ce;">(){  </span><span style="color:#65737e;">//A For loop is used to iterate over every element in the vector, by getting a reference to every element.</span><span style="color:#c0c5ce;">
-        total += *&amp;item;             </span><span style="color:#65737e;">//In order to add each element to the total, you must use the dereference operator (*) to get the value from each referenced element. </span><span style="color:#c0c5ce;">
-    }</span><span style="color:#c0c5ce;">
-</span><span style="color:#c0c5ce;">
-    </span><span style="color:#b48ead;">let mut</span><span style="color:#c0c5ce;"> average = total / float_list.</span><span style="color:#96b5b4;">len</span><span style="color:#c0c5ce;">() as </span><span style="color:#b48ead;">f64</span><span style="color:#c0c5ce;">; </span><span style="color:#65737e;">//The average of all of the items in the vector is calculated. The len() function is used to get the length of the vector, which is then casted as an f64 to enable the division.</span><span style="color:#c0c5ce;">
-</span><span style="color:#c0c5ce;">
-    average </span><span style="color:#65737e;">//The average is returned.</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">ZooAnimal{        </span><span style="color:#65737e;">// This struct is the blueprint that holds one ZooAnimal variety.</span><span style="color:#c0c5ce;">
+    </span><span style="color:#bf616a;">species</span><span style="color:#c0c5ce;">: ZooAnimals, </span><span style="color:#65737e;">// The &#39;species&#39; attribute will only accept values that exist in the ZooAnimals enum.</span><span style="color:#c0c5ce;">
+    </span><span style="color:#bf616a;">weight</span><span style="color:#c0c5ce;">: </span><span style="color:#b48ead;">i32</span><span style="color:#c0c5ce;">,         </span><span style="color:#65737e;">// The weight can be any i32 value.</span><span style="color:#c0c5ce;">
 }</span><span style="color:#c0c5ce;">
 </span></pre>
-<p>Going line-by-line, here is what that function does:</p>
-<ul>
-<li><code>fn calculate_average() -&gt; f64{</code> -- A function is declared with the return value of f64 </li>
-<li><code>let mut total = 0.0;</code> -- A new mutable variable is created with the type of f64</li>
-<li><code>for &amp;item in float_list.iter(){ total += *&amp;item; }</code>                              // A for loop is used to iterate over the vector</li>
-</ul>
+<p>Now, I can create an instance of a ZooAnimal like this:</p>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> tigers = ZooAnimal{        </span><span style="color:#65737e;">// I create an instance of the ZooAnimal struct, and assign it to &#39;tigers&#39;.</span><span style="color:#c0c5ce;">
+  species: ZooAnimals::Tigers, </span><span style="color:#65737e;">// I use the &#39;ZooAnimals::Tigers&#39; variant of the ZooAnimals enum to create the instance. </span><span style="color:#c0c5ce;">
+  weight: </span><span style="color:#d08770;">600</span><span style="color:#c0c5ce;">,</span><span style="color:#c0c5ce;">
+};</span><span style="color:#c0c5ce;">
+</span></pre>
+<p>This code works fine if all you want to create are ZooAnimals, but what if you wanted to create an instance of ANY type of animal? The answer is to use Generics.</p>
+<h2 id="creating-struct-instances-with-generics">Creating struct instances with Generics</h2>
+<p>Generics allow us to create data structures that can accept any type, or subset of a type. Any name can be used to represent a generic type, but the convention in Rust is to use the letter 'T' (meaning type) for any piece of code that accepts a single generic type. If there is more than one generic type needed, other single letters should be used. In a struct, the type parameter for the generic type must be declared in angle brackets after the name of the struct:</p>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">MyStruct&lt;T&gt;{</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></pre>
+<p>Then, inside the code block you can use the generic type anywhere you want. In a struct, you would use it to assign a value to an attribute:</p>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">MyBetterStruct&lt;T&gt;{</span><span style="color:#c0c5ce;">
+    </span><span style="color:#bf616a;">x</span><span style="color:#c0c5ce;">: T                   </span><span style="color:#65737e;">// Whatever value is in &#39;T&#39; will be assigned to x</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></pre>
+<p>Now that that is covered, we can convert our ZooAnimal struct into a struct that holds any type of animal:</p>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">AnimalGeneric&lt;T, U&gt;{  </span><span style="color:#65737e;">//Two generic parameters are used.</span><span style="color:#c0c5ce;">
+    </span><span style="color:#bf616a;">species</span><span style="color:#c0c5ce;">: T,</span><span style="color:#c0c5ce;">
+    </span><span style="color:#bf616a;">weight</span><span style="color:#c0c5ce;">: U,</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></pre>
+<p>This struct holds any type of animal, which could be a String name, a different enum, or anything else! It could also accept any number value for the weight (i32, f32, f64, etc.).</p>
+<h2 id="traits">Traits</h2>
+<p>Traits are a way to define a contract of behaviour for a struct without needed to provide an implementation. Following our zoo animal example, we can create a trait called Sound that defines the sound an animal will make when the method is called.</p>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">trait </span><span style="color:#c0c5ce;">Sound{                    </span><span style="color:#65737e;">//Sound trait defined</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">make_sound</span><span style="color:#c0c5ce;">(&amp;</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">){       </span><span style="color:#65737e;">//make_sound method defined with default behaviour.</span><span style="color:#c0c5ce;">
+        println!(&quot;</span><span style="color:#a3be8c;">silence...</span><span style="color:#c0c5ce;">&quot;)</span><span style="color:#c0c5ce;">
+    } </span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></pre>
+<p>Now we have to implement the Sound trait on something... let's implement it on the AnimalGeneric struct. While we are at it, lets also add a third attribute to AnimalGeneric, sound:</p>
+<pre style="background-color:#2b303b;">
+<span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">impl </span><span style="color:#c0c5ce;">Sound </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">AnimalGeneric&lt;T, U, Y&gt;{     </span><span style="color:#65737e;">//The Sound trait has been implemented on the struct</span><span style="color:#c0c5ce;">
+    </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">make_sound</span><span style="color:#c0c5ce;">(&amp;</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">) -&gt; String {</span><span style="color:#c0c5ce;">
+        println!(&quot;</span><span style="color:#a3be8c;">The </span><span style="color:#d08770;">{}</span><span style="color:#a3be8c;"> makes a sound of </span><span style="color:#d08770;">{}</span><span style="color:#c0c5ce;">&quot;, </span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">.species, </span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">.sound)  </span><span style="color:#65737e;">//The parameters of the AnimalGeneric instance will be passed into the method when it is created.</span><span style="color:#c0c5ce;">
+    }</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">struct </span><span style="color:#c0c5ce;">AnimalGeneric&lt;T, U, Y&gt;{</span><span style="color:#c0c5ce;">
+    </span><span style="color:#bf616a;">species</span><span style="color:#c0c5ce;">: T,</span><span style="color:#c0c5ce;">
+    </span><span style="color:#bf616a;">weight</span><span style="color:#c0c5ce;">: U,</span><span style="color:#c0c5ce;">
+    </span><span style="color:#bf616a;">sound</span><span style="color:#c0c5ce;">: Y    </span><span style="color:#65737e;">//&#39;sound&#39; attribute is added</span><span style="color:#c0c5ce;">
+}</span><span style="color:#c0c5ce;">
+</span></pre>
+<p>All that's left to do now is create an instance of the AnimalGeneric struct so that we can call the method on it:</p>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> dog = AnimalGeneric{species: &quot;</span><span style="color:#a3be8c;">dog</span><span style="color:#c0c5ce;">&quot;, weight: </span><span style="color:#d08770;">60</span><span style="color:#c0c5ce;">, sound: &quot;</span><span style="color:#a3be8c;">bark</span><span style="color:#c0c5ce;">&quot;};</span><span style="color:#c0c5ce;">
+dog.</span><span style="color:#96b5b4;">make_sound</span><span style="color:#c0c5ce;">(); </span><span style="color:#65737e;">//&#39;bark&#39; is printed to the screen!</span><span style="color:#c0c5ce;">
+</span></pre>
+<p>If we call make_sound() on an instance of a generic giraffe with no sound supplied, the default implementation that we defined earlier on the trait is used:</p>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> giraffe = AnimalGeneric{species: &quot;</span><span style="color:#a3be8c;">giraffe</span><span style="color:#c0c5ce;">&quot;, weight: </span><span style="color:#d08770;">800</span><span style="color:#c0c5ce;">, sound: ()}; </span><span style="color:#c0c5ce;">
+giraffe.</span><span style="color:#96b5b4;">make_sound</span><span style="color:#c0c5ce;">(); </span><span style="color:#65737e;">//&#39;silence...&#39; is outputted, because giraffes are inaudible to humans.</span><span style="color:#c0c5ce;">
+</span></pre>
+<p>And then finally, creating an instance of one of the ZooAnimals with a sound supplied will work as expected:</p>
+<pre style="background-color:#2b303b;">
+<span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> lion = ZooAnimal{species: ZooAnimals::Lions, weight: </span><span style="color:#d08770;">500</span><span style="color:#c0c5ce;">, sound: &quot;</span><span style="color:#a3be8c;">roar</span><span style="color:#c0c5ce;">&quot;};</span><span style="color:#c0c5ce;">
+lion.</span><span style="color:#96b5b4;">make_sound</span><span style="color:#c0c5ce;">(); </span><span style="color:#65737e;">// &#39;roar&#39; is outputted</span><span style="color:#c0c5ce;">
+</span></pre><h2 id="conclusion">Conclusion</h2>
+<p>So as you can see, using Traits and Generics in your code will make it a lot more flexible and should lead to less code duplication. They can also be used to program in an Object-Oriented style, to make the transition easier from languages such as Java.
+One thing I want to mention is that you <em>may</em> have issues with printing to the screen depending on the Traits and Structs you are using. Please check here if you are having problems: <a href="https://doc.rust-lang.org/rust-by-example/hello/print/print_display.html">display formatting</a></p>
+<p>Thank you for reading!</p>
+<p><img src="./ferris.gif" alt="Ferris" title="Ferris the crab" /></p>
+<h3 id="stay-rusty">Stay Rusty!</h3>
+<h4 id="see-more-at-the-official-rust-documentation">See more at the <a href="https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html">Official Rust documentation</a></h4>
 
 
         </div>
@@ -88,7 +155,7 @@
                     &#183;
                 
             
-            <a href="https:&#x2F;&#x2F;happy-cori-96ef5a.netlify.com&#x2F;">
+            <a href="http:&#x2F;&#x2F;127.0.0.1:1111&#x2F;">
                 home
             </a>
         </p>
@@ -99,5 +166,5 @@
 
     </div>
 
-    </body>
+    <script src="/livereload.js?port=1000&mindelay=10"></script></body>
 </html>

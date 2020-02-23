@@ -36,7 +36,7 @@
         
         
             
-                &#183; 979 words
+                &#183; 977 words
             
         
         
@@ -53,7 +53,7 @@
 <p>Rust is a very unique programming language. It gives you low-level control over your code and the ability to manage 
 memory without allocating it or de-allocating it with specific commands (although that is also possible with the 
 <a href="https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html?highlight=unsafe#unsafe-rust">unsafe</a>
-keyword. One of the ways that Rust can guarantee memory safety without a garbage collector is by implementing the 
+keyword). One of the ways that Rust can guarantee memory safety without a garbage collector is by implementing the 
 concepts of <em>ownership</em> and <em>borrowing</em> into the language.</p>
 <p id="zola-continue-reading"><a name="continue-reading"></a></p>
 
@@ -64,9 +64,9 @@ code to compile.</p>
 <ul>
 <li>Every value is assigned to a variable, and that variable is the value's owner.</li>
 <li>Every value can only have ONE owner at any given time.</li>
-<li>When the owner variable goes out of scope, a special function named <code>drop</code> is called it and its value is dropped.</li>
+<li>When the owner variable goes out of scope, a special function named <code>drop</code> is called and its value is dropped.</li>
 </ul>
-<p>Lets define a couple of those terms mentioned:</p>
+<p>Let's define a couple of those terms mentioned:</p>
 <p><strong><em>scope</em></strong> refers to the lines in the program where a variable is valid.</p>
 <p><strong><em>drop</em></strong> is a function that Rust calls on variables allocated to the heap, that frees up memory for that variable when 
 it goes out of scope. </p>
@@ -126,7 +126,7 @@ that variable.</p>
     String::from(&quot;</span><span style="color:#a3be8c;">rented</span><span style="color:#c0c5ce;">&quot;) </span><span style="color:#65737e;">//The String &quot;rented&quot; is returned from the function. </span><span style="color:#c0c5ce;">
 }</span><span style="color:#c0c5ce;">
 </span></pre>
-<p>So far, so good. but what if we try to modify the <code>movie</code> in <code>rent_movie()</code>?</p>
+<p>So far, so good. But what if we try to modify the <code>movie</code> in <code>rent_movie()</code>?</p>
 <pre style="background-color:#2b303b;">
 <span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">(){</span><span style="color:#c0c5ce;">
     </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> movie = String::from(&quot;</span><span style="color:#a3be8c;">Star Wars</span><span style="color:#c0c5ce;">&quot;);</span><span style="color:#c0c5ce;">
@@ -151,7 +151,7 @@ that variable.</p>
 error: aborting due to previous error</span><span style="color:#c0c5ce;">
 </span></pre>
 <p>This error illustrates something very important about Rust-- all variable are immutable by default! Typically, you would use a reference variable if you just wanted to read its value and not modify it.
-However, this error can be fixed by making <code>movie</code> mutable. That is, make it so that it's value can be modified. We can do this by adding the <code>mut</code> 
+However, this error can be fixed by making <code>movie</code> mutable. That is, make it so that its value can be modified. We can do this by adding the <code>mut</code> 
 keyword to the variable declaration and also make it so that <code>rent_movie()</code> accepts a mutable String as a parameter:</p>
 <pre style="background-color:#2b303b;">
 <span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">main</span><span style="color:#c0c5ce;">(){</span><span style="color:#c0c5ce;">
@@ -164,7 +164,7 @@ keyword to the variable declaration and also make it so that <code>rent_movie()<
     movie </span><span style="color:#65737e;">//return the String &quot;Star Wars: Director&#39;s Cut&quot;</span><span style="color:#c0c5ce;">
 }</span><span style="color:#c0c5ce;">
 </span></pre><h2 id="conclusion">Conclusion</h2>
-<p>The main takeaways from this post are: values can be assigned (moved) to different variables, but can only belong to ONE
+<p>The main takeaways from this post are: values can be moved to different variables, but can only belong to ONE
 variable at any given time. If you want to temporarily pass the value of a variable to a function, you can pass a reference 
 to that variable to the function, and the function will <strong><em>borrow</em></strong> the variable and then give it back after the function 
 returns. There is a lot more to this topic, but I will leave it there for now!</p>
@@ -195,5 +195,5 @@ returns. There is a lot more to this topic, but I will leave it there for now!</
 
     </div>
 
-    <script src="/livereload.js?port=1001&mindelay=10"></script></body>
+    <script src="/livereload.js?port=1000&mindelay=10"></script></body>
 </html>
