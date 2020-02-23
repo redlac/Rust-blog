@@ -2,6 +2,7 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/themes/sam" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/themes/zola-sam" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/zola-sam" vcs="Git" />
   </component>
