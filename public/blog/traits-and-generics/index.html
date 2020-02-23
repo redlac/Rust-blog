@@ -98,7 +98,7 @@
 </span></pre>
 <p>This struct holds any type of animal, which could be a String name, a different enum, or anything else! It could also accept any number value for the weight (i32, f32, f64, etc.).</p>
 <h2 id="traits">Traits</h2>
-<p>Traits are a way to define a contract of behaviour for a struct without needed to provide an implementation. Following our zoo animal example, we can create a trait called Sound that defines the sound an animal will make when the method is called.</p>
+<p>Traits are a way to define a contract of behaviour for a struct without needing to provide an implementation. Following our zoo animal example, we can create a trait called Sound that defines the sound an animal will make when the method is called.</p>
 <pre style="background-color:#2b303b;">
 <span style="color:#b48ead;">trait </span><span style="color:#c0c5ce;">Sound{                    </span><span style="color:#65737e;">//Sound trait defined</span><span style="color:#c0c5ce;">
     </span><span style="color:#b48ead;">fn </span><span style="color:#8fa1b3;">make_sound</span><span style="color:#c0c5ce;">(&amp;</span><span style="color:#bf616a;">self</span><span style="color:#c0c5ce;">){       </span><span style="color:#65737e;">//make_sound method defined with default behaviour.</span><span style="color:#c0c5ce;">
@@ -106,7 +106,7 @@
     } </span><span style="color:#c0c5ce;">
 }</span><span style="color:#c0c5ce;">
 </span></pre>
-<p>Now we have to implement the Sound trait on something... let's implement it on the AnimalGeneric struct. While we are at it, lets also add a third attribute to AnimalGeneric, sound:</p>
+<p>Now we have to implement the Sound trait on something... let's implement it on the AnimalGeneric struct. While we are at it, lets also add a third attribute to AnimalGeneric-- sound:</p>
 <pre style="background-color:#2b303b;">
 <span style="color:#c0c5ce;">
 </span><span style="color:#b48ead;">impl </span><span style="color:#c0c5ce;">Sound </span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">AnimalGeneric&lt;T, U, Y&gt;{     </span><span style="color:#65737e;">//The Sound trait has been implemented on the struct</span><span style="color:#c0c5ce;">
@@ -139,9 +139,9 @@ lion.</span><span style="color:#96b5b4;">make_sound</span><span style="color:#c0
 <p>So as you can see, using Traits and Generics in your code will make it a lot more flexible and should lead to less code duplication. They can also be used to program in an Object-Oriented style, to make the transition easier from languages such as Java.
 One thing I want to mention is that you <em>may</em> have issues with printing to the screen depending on the Traits and Structs you are using. Please check here if you are having problems: <a href="https://doc.rust-lang.org/rust-by-example/hello/print/print_display.html">display formatting</a></p>
 <p>Thank you for reading!</p>
-<p><img src="./ferris.gif" alt="Ferris" title="Ferris the crab" /></p>
+<p><img src="/images/ferris.gif" alt="Ferris" title="Ferris the crab" /></p>
 <h3 id="stay-rusty">Stay Rusty!</h3>
-<h4 id="see-more-at-the-official-rust-documentation">See more at the <a href="https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html">Official Rust documentation</a></h4>
+<h4 id="see-more-at-the-official-rust-documentation">See more at the <a href="https://doc.rust-lang.org/book/ch10-00-generics.html">Official Rust documentation</a></h4>
 
 
         </div>

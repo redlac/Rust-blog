@@ -69,7 +69,7 @@ This struct holds any type of animal, which could be a String name, a different 
 
 ## Traits
 
-Traits are a way to define a contract of behaviour for a struct without needed to provide an implementation. Following our zoo animal example, we can create a trait called Sound that defines the sound an animal will make when the method is called.
+Traits are a way to define a contract of behaviour for a struct without needing to provide an implementation. Following our zoo animal example, we can create a trait called Sound that defines the sound an animal will make when the method is called.
 
 ```rust
 trait Sound{                    //Sound trait defined
@@ -79,7 +79,7 @@ trait Sound{                    //Sound trait defined
 }
 ```
 
-Now we have to implement the Sound trait on something... let's implement it on the AnimalGeneric struct. While we are at it, lets also add a third attribute to AnimalGeneric, sound:
+Now we have to implement the Sound trait on something... let's implement it on the AnimalGeneric struct. While we are at it, lets also add a third attribute to AnimalGeneric-- sound:
 
 ```rust
 
@@ -122,8 +122,8 @@ One thing I want to mention is that you *may* have issues with printing to the s
 
 Thank you for reading!
 
-![Ferris](./ferris.gif "Ferris the crab")
+![Ferris](/images/ferris.gif "Ferris the crab")
 
 ### Stay Rusty!
 
-#### See more at the [Official Rust documentation](https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html)
+#### See more at the [Official Rust documentation](https://doc.rust-lang.org/book/ch10-00-generics.html)
