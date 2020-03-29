@@ -4,7 +4,7 @@ date = 2020-03-29
 hide_word_count = true
 hide_reading_time = true
 +++
-# Building a simple REST API with the Rocket Web Framework
+# Building a simple web server with the Rocket Web Framework
 
 ## Introduction
 
