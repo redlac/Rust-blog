@@ -1,5 +1,5 @@
 +++
-title = "Building a simple REST API with the Rocket Web Framework"
+title = "Building a simple web server with the Rocket Web Framework"
 date = 2020-03-29
 hide_word_count = true
 hide_reading_time = true
@@ -12,7 +12,7 @@ Rocket is a web framework written in and designed to be used for the Rust progra
 
 ##  Create a new Rust project
 
-First, we need to create a new Rust project. The project will be named 'basic-web'. Navigate the directory where you want the project to be and enter the following two commands in your terminal:
+First, we need to create a new Rust project. The project will be named 'basic-web'. Navigate to the directory where you want the project to be and enter the following two commands in your terminal:
 
 ```shell script
 cargo new basic-web --bin
@@ -93,7 +93,7 @@ fn main() {
 }
 ```
 
-This code will create an new instance of Rocket with `ignite()`, and mount all of the routes in the supplied Vector at the given base path. The Vector is the `routes![world]` part, which accepts any number of route handling function. We are matching two different routes, the base path of the server at `/`, and the path at `/hello`. `/` will be used to serve the image, and `/hello` will be used to serve a text response. 
+This code will create an new instance of Rocket with `ignite()`, and mount all of the routes in the supplied Vector at the given base path. The Vector is the `routes![world]` part, which accepts any number of route handling functions. We are matching two different routes, the base path of the server at `/`, and the path at `/hello`. `/` will be used to serve the image, and `/hello` will be used to serve a text response. 
 The `launch()` function will start the Rocket application server and begin listening for and dispatching requests to the mounted routes.
 
 Finally, add these lines to the main.rs file:
@@ -106,7 +106,7 @@ use rocket::response::NamedFile;
 extern crate rocket;
 ```
 
-The `#![feature]` line tells Rust to use feature from the Nightly version of Rust.
+The `#![feature]` line tells Rust to use 'feature' from the Nightly version of Rust.
 The `extern crate rocket` imports the Rocket crate and all of it's macros that are needed to run the server. 
 
 ## Starting the server
@@ -128,7 +128,7 @@ Now we can start the server! Start the application by typing `cargo run` into th
 🚀  Rocket has launched from http://localhost:8000
 ```
 You can now visit `http://localhost:8000/<name>`, where `<name>` is any name, and the browser should display `Hello <name>`. 
-Visit `http://localhost:8000/<image>` where <image> is the file name of the image in the `static` folder. The image should display in the browser, like so:
+Visit `http://localhost:8000/<image>` where 'image' is the file name of the image in the `static` folder. The image should display in the browser, like so:
 
 ![screenshot](/images/screen.png "Image being served from localhost:8000/ferris.gif")
 
